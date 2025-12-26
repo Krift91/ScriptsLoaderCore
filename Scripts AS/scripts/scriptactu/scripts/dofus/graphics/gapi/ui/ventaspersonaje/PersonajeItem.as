@@ -1,0 +1,94 @@
+if(!dofus)
+{
+   _global.dofus = new Object();
+}
+if(!dofus["\r\x14"])
+{
+   _global.dofus["\r\x14"] = new Object();
+}
+if(!dofus["\r\x14"].gapi)
+{
+   _global.dofus["\r\x14"].gapi = new Object();
+}
+if(!dofus["\r\x14"].gapi.ui)
+{
+   _global.dofus["\r\x14"].gapi.ui = new Object();
+}
+if(!dofus["\r\x14"].gapi.ui.ventaspersonaje)
+{
+   _global.dofus["\r\x14"].gapi.ui.ventaspersonaje = new Object();
+}
+_global.dofus["\r\x14"].gapi.ui.ventaspersonaje.PersonajeItem = function()
+{
+   super();
+};
+_global.dofus["\r\x14"].gapi.ui.ventaspersonaje.PersonajeItem.prototype = new dofus["\r\x14"].gapi.core["\x10\x19"]();
+var _loc1 = _global.dofus["\r\x14"].gapi.ui.ventaspersonaje.PersonajeItem.prototype;
+_loc1.__set__list = function(mcList)
+{
+   this._mcList = mcList;
+};
+_loc1.setValue = function(bUsed, sSuggested, oItem)
+{
+   if(bUsed)
+   {
+      this._oItem = oItem;
+      var _loc12_ = oItem.id;
+      var _loc11_ = oItem.idPersonaje;
+      var _loc3_ = oItem.colores;
+      var _loc7_ = oItem.accesorios;
+      var _loc6_ = oItem.ogrinas;
+      var _loc4_ = oItem.claseID;
+      var _loc8_ = oItem.nombre;
+      var _loc10_ = oItem.nivel;
+      var _loc5_ = oItem.sexo;
+      this._svPersonaje._visible = true;
+      this._svPersonaje.zoom = 150;
+      this._svPersonaje.spriteAnims = ["StaticR"];
+      this._svPersonaje.refreshDelay = 50;
+      this._oColors = {color1:_loc3_.split("*")[0],color2:_loc3_.split("*")[1],color3:_loc3_.split("*")[2]};
+      this._svPersonaje.useSingleLoader = true;
+      this._csColors.breed = _loc4_;
+      this._csColors.sex = _loc5_;
+      this._csColors.colors = {color1:_loc3_.split("*")[0],color2:_loc3_.split("*")[1],color3:_loc3_.split("*")[2]};
+      var _loc9_ = _loc4_ + "" + _loc5_;
+      this._svPersonaje.spriteData = new ank.battlefield.datacenter["\x1e\x0e\x10"](undefined,ank.battlefield.mc["\x1e\x0e\x10"],dofus.Constants.CLIPS_PERSOS_PATH + _loc9_ + ".swf",undefined,5);
+      this._svPersonaje.enableBlur = true;
+      this._svPersonaje.refreshAccessories = true;
+      this._svPersonaje.sourceSpriteData = _loc3_;
+      this._svPersonaje.setColors(this._oColors);
+      this._svPersonaje._capa._visible = false;
+      this.api.kernel.CharactersManager.setSpriteAccessories(this._svPersonaje.spriteData,_loc7_);
+      this._lblNombre.text = _loc8_;
+      this._lblNivel.text = _loc10_;
+      this._lblOgrinas.text = _loc6_;
+      this._txtNvl.text = this.api.lang.getText("LEVEL_SMALL");
+      this._lblOgrinas.text = new ank["\x1e\n\x07"]["\x0e\x1c"](_loc6_).addMiddleChar(this.api.lang.getConfigText("THOUSAND_SEPARATOR"),3);
+      this._iconOgr._visible = true;
+      this._lblClase.text = this.api.lang.getClassText(_loc4_).ln;
+   }
+   else if(Number(oItem.cantidad) < 1)
+   {
+      this._lblName.text = "";
+      this._txtNvl.text = "";
+      this._lblNivel.text = "";
+      this._ldrIcon.contentPath = "";
+      this._lblOgrinas.text = "";
+      this._iconOgr._visible = false;
+      this._lblClase.text = "";
+      this._svPersonaje._visible = false;
+   }
+};
+_loc1.init = function()
+{
+   super.init(false);
+   this._iconOgr._visible = false;
+   this._svPersonaje._visible = false;
+};
+loc1.addProperty("list",function()
+{
+}
+,_loc1.__set__list);
+_loc1._sColors = "";
+_loc1._sRopa = "";
+ASSetPropFlags(_loc1,null,1);

@@ -1,0 +1,98 @@
+class dofus.§\r\x14§.gapi.controls.AlignmentViewer extends dofus.§\r\x14§.gapi.core.§\x10\x19§
+{
+   var _lblAlignment;
+   var _pbAlignment;
+   var _mcAlignment;
+   var _lblTitle;
+   var _mcTab;
+   var _mcTabPlacer;
+   var _ldrIcon;
+   var _lblNoAlignement;
+   static var CLASS_NAME = "AlignmentViewer";
+   var _sCurrentTab = "Specialization";
+   function AlignmentViewer()
+   {
+      super();
+   }
+   function set enable(§\x1c\x1d§)
+   {
+      this._lblAlignment._visible = _loc2_;
+      this._pbAlignment._visible = _loc2_;
+      this._mcAlignment._visible = _loc2_;
+   }
+   function init()
+   {
+      super.init(false,dofus["\r\x14"].gapi.controls.AlignmentViewer.CLASS_NAME);
+   }
+   function createChildren()
+   {
+      this._pbAlignment._visible = false;
+      this._lblAlignment._visible = false;
+      this.addToQueue({object:this,method:this.initTexts});
+      this.addToQueue({object:this,method:this.addListeners});
+      this.addToQueue({object:this,method:this.initData});
+   }
+   function initTexts()
+   {
+      this._lblTitle.text = this.api.lang.getText("ALIGNMENT");
+      this._lblAlignment.text = this.api.lang.getText("LEVEL");
+   }
+   function addListeners()
+   {
+      this.api.datacenter.Player.addEventListener("alignmentChanged",this);
+   }
+   function initData()
+   {
+      this._sCurrentTab = "Specialization";
+      this.alignmentChanged({alignment:this.api.datacenter.Player.alignment});
+   }
+   function updateCurrentTabInformations()
+   {
+      this._mcTab.removeMovieClip();
+      switch(this._sCurrentTab)
+      {
+         case "Specialization":
+            this.attachMovie("SpecializationViewer","_mcTab",this.getNextHighestDepth(),{_x:this._mcTabPlacer._x,_y:this._mcTabPlacer._y});
+            break;
+         case "Rank":
+            this.attachMovie("RankViewer","_mcTab",this.getNextHighestDepth(),{_x:this._mcTabPlacer._x,_y:this._mcTabPlacer._y});
+      }
+   }
+   function setCurrentTab(§\x1e\x0f\x14§)
+   {
+      var _loc3_ = this["_btnTab" + this._sCurrentTab];
+      var _loc4_ = this["_btnTab" + _loc2_];
+      _loc3_.selected = true;
+      _loc3_.enabled = true;
+      _loc4_.selected = false;
+      _loc4_.enabled = false;
+      this._sCurrentTab = _loc2_;
+      this.updateCurrentTabInformations();
+   }
+   function alignmentChanged(oEvent)
+   {
+      this._mcTab.removeMovieClip();
+      this._ldrIcon.contentPath = oEvent.alignment.iconFile;
+      this._lblTitle.text = this.api.lang.getText("ALIGNMENT") + " " + oEvent.alignment.name;
+      if(this.api.datacenter.Player.alignment.index != 0)
+      {
+         this.enable = true;
+         this._lblNoAlignement.text = "";
+         this._pbAlignment.value = oEvent.alignment.value;
+         this._mcAlignment.onRollOver = function()
+         {
+            this._parent.gapi.showTooltip(new ank["\x1e\n\x07"]["\x0e\x1c"](oEvent.alignment.value).addMiddleChar(this._parent.api.lang.getConfigText("THOUSAND_SEPARATOR"),3) + " / " + new ank["\x1e\n\x07"]["\x0e\x1c"](this._parent._pbAlignment.maximum).addMiddleChar(this._parent.api.lang.getConfigText("THOUSAND_SEPARATOR"),3),this,-10);
+         };
+         this._mcAlignment.onRollOut = function()
+         {
+            this._parent.gapi.hideTooltip();
+         };
+         this.setCurrentTab(this._sCurrentTab);
+      }
+      else if(this._lblNoAlignement.text != undefined)
+      {
+         this.enable = false;
+         this._lblNoAlignement.text = this.api.lang.getText("NO_ALIGNEMENT");
+      }
+   }
+}

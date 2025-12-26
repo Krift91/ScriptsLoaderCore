@@ -1,0 +1,117 @@
+class dofus.§\x0b\b§.§\x1e\x12\x0f§ extends dofus.§\x1e\n\x07§.§\x1d\x19§
+{
+   var _sObjectName;
+   var _sFolder;
+   var _oFailedURL;
+   var _sFile;
+   var _mc;
+   var _mcl;
+   var _aServers;
+   var _urlIndex;
+   var _oCurrentServer;
+   var _sCurrentFileURL;
+   var _timerID;
+   var onError;
+   var onComplete;
+   var onFailed;
+   function §\x1e\x12\x0f§()
+   {
+      super();
+   }
+   function initialize(oAPI, §\x1e\x0f\x0e§, §\x1e\x12\x06§)
+   {
+      super.initialize(oAPI);
+      this._sObjectName = _loc4_;
+      this._sFolder = _loc5_;
+      this._oFailedURL = new Object();
+   }
+   function loadData(§\x1e\x12\x0b§)
+   {
+      if(this._sFile == _loc2_)
+      {
+         return undefined;
+      }
+      this._sFile = _loc2_;
+      this.clearTimer();
+      this._mcl.unloadClip(this._mc);
+      this.api.ui.loadUIComponent("Waiting","Waiting");
+      this._aServers = _root._loader.copyAndOrganizeDataServerList();
+      this._urlIndex = -1;
+      this.loadWithNextURL();
+   }
+   function loadWithNextURL()
+   {
+      this._urlIndex++;
+      if(this._urlIndex < this._aServers.length && this._aServers.length > 0)
+      {
+         this._oCurrentServer = this._aServers[this._urlIndex];
+         this._sCurrentFileURL = this._oCurrentServer.url + this._sFolder + this._sFile;
+         System.security.allowDomain(this._oCurrentServer.url);
+         this._mcl = new MovieClipLoader();
+         this._mcl.addListener(this);
+         this._timerID = _global.setInterval(this.onEventNotCall,3000);
+         this._mc = _root.createEmptyMovieClip("__ANKSWFDATA__",_root.getNextHighestDepth());
+         this._mcl.loadClip(this._sCurrentFileURL,this._mc);
+      }
+      else
+      {
+         this.onAllLoadFailed(this._mc);
+      }
+   }
+   function clear()
+   {
+      this.clearTimer();
+   }
+   function getCurrentServer()
+   {
+      return this._oCurrentServer.url + this._sFolder;
+   }
+   function clearTimer()
+   {
+      _global.clearInterval(this._timerID);
+   }
+   function clearUI()
+   {
+      this.api.ui.unloadUIComponent("Waiting");
+      this.api.ui.unloadUIComponent("CenterText");
+   }
+   function onEventNotCall()
+   {
+      this.clearTimer();
+      this.onLoadError();
+   }
+   function onLoadStart()
+   {
+      this.clearTimer();
+   }
+   function onLoadError(§\n\x1d§)
+   {
+      this.api.kernel.showMessage(undefined,"Erreur au chargement du fichier \'" + this._sCurrentFileURL + "\'","DEBUG_LOG");
+      this.clearTimer();
+      this.onError(_loc2_);
+      this.loadWithNextURL();
+   }
+   function onLoadProgress()
+   {
+      this.clearTimer();
+   }
+   function onLoadComplete()
+   {
+      this.clearTimer();
+   }
+   function onLoadInit(§\n\x1d§)
+   {
+      this.clearTimer();
+      this._sFile = undefined;
+      this.clearUI();
+      this.onComplete(_loc2_);
+   }
+   function onAllLoadFailed(§\n\x1d§)
+   {
+      this.api.kernel.showMessage(undefined,"Chargement du fichier \'" + this._sFile + "\' impossible ","DEBUG_LOG");
+      this.clearTimer();
+      this._sFile = undefined;
+      this.clearUI();
+      this.onFailed(_loc2_);
+   }
+}
